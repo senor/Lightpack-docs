@@ -2,15 +2,15 @@
 
 * [help](#help)
 * [exit](#exit)
- * [Авторизация подключения](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D1%8F)
+ * [Connection authorization](#%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D1%8F)
 * [apikey](#apikey)
- * [GET-команды](#get-%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D1%8B)
+ * [GET-commands](#get-%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D1%8B)
 * [getstatus](#getstatus)
 * [getstatusapi](#getstatusapi)
 * [getprofiles](#getprofiles)
 * [getprofile](#getprofile)
 * [getcountled](#getcountled)
-  * [SET-команды](#set-%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D1%8B)
+  * [SET-commands](#set-%D0%BA%D0%BE%D0%BC%D0%B0%D0%BD%D0%B4%D1%8B)
 * [lock](#lock)
 * [unlock](#unlock)
 * [setcolor](#setcolor)
@@ -20,16 +20,16 @@
 * [setprofile](#setprofile)
 * [setstatus](#setstatus)
 
-Документ описывает "низкоуровневый" API (документация актуальна для версии API 1.3), который позволяет управлять устройством из внешних программ и плагинов через механизм сокетов. Фактически, из любой ОС, вы можете подключиться через терминал и посылать устройству команды в режиме реального времени.
+This document describes low-level API (documentation is valid for API ver. 1.3), which allows to control the device with the help of external software and plugins via sockets mechanism. In pactice, you can connect to device from any OS through terminal and send commands to it in real-time. 
 
 <pre>
 >> telnet 127.0.0.1 3636
 &lt;&lt; Lightpack API v1.3 (type "help" for more info)
 </pre>
 
-На практике для написания плагинов это не очень удобно из-за того, что постоянно приходится контролировать посылки в порт и ответы сервера. Поэтому мы создали специальный класс-обёртку для языка Python, которая называется pyLightpack. С его помощью вы изолируете себя от работы с сокетами и сможете сосредоточиться непосредственно на плагинах. Писать управляющие Лайтпаком скрипты с её помощью проще, чем настраивать конфиг для Quake.)
+As a matter of actual practice, it's not very convenient for plugins writing as there's a need of constant control of port sendings and server replies. This is why we created a special wrapper class for Python, which is called pyLightpack. With the help of it you can separate yourself from working on sockets and concentrate directly on plugins. To write controlling scripts with the help of it is easier than to set the config for Quake.) 
 
-Однако, для точного понимания того, как именно функционирует API мы приводим здесь полный список команд с которыми он взаимодействует. Технически это взаимодействие реализуется через сервер, который при старте усправляющего софта Лайтпака открывает и "слушает" порт 3636 (по умолчанию).
+However, for the precise understanding of API functionality, we bring forward the full list of interaction commands. From technical point of view this interaction realizes through server, which opens and communicates with the port 3636 (by default). 
 
 ## help
 
@@ -37,7 +37,7 @@
 &lt;&lt; help
 </pre>
 
-Команда выводит самую актуальную справку по текущей версии API и доступна постоянно.
+This command brings the latest information on the current API version and is always available.
 
 ## exit
 
@@ -46,17 +46,17 @@
 &lt;&lt; Goodbye!
 </pre>
 
-Команда закрывает подключение к серверу и доступна постоянно.
+This command closes connection to server and is always available.
 
-## Авторизация подключения
+## Connection authorization
 
-Начиная с версии 1.1 API поддерживает авторизацию внешних подключений. Это простейший путь защиты от несанкционированных подключений к устройству извне. Он предполагает посылку ключа авторизации, который известен лишь серверу. Вы всегда можете сгенерировать новый ключ авторизации, или вовсе отключить её в настройках программы захвата Лайтпака. Если авторизация включена, то единственный способ пройти её и получить доступ к остальным командам это команда
+Starting with ver. 1.1. API supports external connections authorization, which is the most simple way of protection from outside unauthorized connections to device. It supposes sending an authorization key that is only known to server. You always can generate new authorization key or turn authorization off in the settings of Lightpack capturing software. If authorization is on, then the only way to pass through it and gain access to the rest of commands is the command.
 
 ## apikey
 
-*Возвращаемые значения*: *ok или fail*
+*Returned values*: *ok or fail*
 
-Отправляет серверу строку ключа авторизации. Если строка совпадает с заданной в программе, сервер авторизует подключение и у пользователя появляется доступ ко всем командам API.
+Sends the authorization key line to the server. If the line matches with the specified in the program, then the server authorizes connection and the user gains access to all API commands. 
 
 <pre>
 >> apikey:{209e6248-b0d4-4757-a355-9593ee34f700}
@@ -65,15 +65,15 @@
 &lt;&lt; ok
 </pre>
 
-## GET-команды
+## GET-commands
 
-Работают при любых настройках подключения, даже в том случае когда управление устройством не передано API
+Available with any connection settings, even if device controlling wasn't passed on to API
 
 ## getstatus
 
-*Возвращаемые значения: on, off, device error или unknown*
+*Returned values: on, off, device error or unknown*
 
-Возвращает состояние устройства, которое, будучи подключенным к ПК может быть выключено (светодиоды не горят), или включено в настройках программы захвата. Команда возвращает device error в случае ошибки доступа к устройству (иконка в трее меняется на запрещающую). Unknown -- маловероятное событие, которое происходит при истечении таймаута запроса к GUI (~1 с.)
+Returnes the status of device, which, while being connected to PC, might be turned off (LEDs are not burning) or might be turned on in the capturing software settings. The command returnes device error in case of error of the access to device (the icon in tray changes to the forbidding one). Unknown is a hardly probable event that occurs upon the expiry of request timeout to GUI (~1 s.)  
 
 <pre>
 >> getstatus
@@ -82,9 +82,9 @@
 
 ## getstatusapi
 
-*Возвращаемые зачения: idle или busy*
+*Returned values: idle or busy*
 
-Возвращает текущее состояние API устройства. API занят в том случае, если управление устройством осуществляется извне (вами, вашим скриптом, кем-то по сети и пр.) и свободен если устройством управляет программа захвата. До тех пор пока не будет выполнена команда lock (см. ниже) API не может быть занят.
+Returnes the current status of API. API is busy if device controlling is realized from outside (by you, your script, by someone from Internet, etc) and is idle if device is being controlled by capturing software. Unless "lock" command is executed (see below) API cannot be busy.
 
 <pre>
 >> getstatusapi
@@ -93,7 +93,7 @@
 
 ## getprofiles
 
-Возвращает полный список профилей настроек управляющей программы через ; . Профили хранятся в папке Profiles.
+Returnes full profiles list of controlling program settings, separated by ; . Profiles are kept in Profiles folder.
 <pre>
 >> getprofiles
 &lt;&lt; profiles:Lightpack;test07;New profile 1;
@@ -101,7 +101,7 @@
 
 ## getprofile
 
-Возвращает имя текущего активного профиля.
+Returnes the name of the current active profile.
 <pre>
 >> getprofile
 &lt;&lt; profile:test07
@@ -109,23 +109,23 @@
 
 ## getcountleds
 
-Начиная с версии 5.8 управляющей программы у пользователя появилась возможность управлять с её помощью разными устройствами. Для некоторых из них пользователь может самостоятельно выбирать количество зон захвата от 1 до 50 по количеству используемых светодиодов.
+Starting with version 5.8 of controlling program, the user got a possibility of controlling various devices with the help of it. For some of them, user can choose by himself the quantity of capturing zones from 1 to 50 according to the quantity of the LEDs in use.
 
-Команда возвращает общее количество всех зон захвата (активных и отключенных) в текущем профиле.
+The command returnes the total amount of all capturing zones (active and non-active) in the current profile.
 
 <pre>
 >> getcountleds
 &lt;&lt; countleds:10
 </pre>
 
-## SET-команды
+## SET-commands
 
-Могут быть выполнены в том случае, когда контроль над устройством передан API посредством команды lock
+May be executed when device controlling is passed on to API by the "lock" command. 
 
 ## lock
-*Возвращаемые значения: success или busy*
+*Returned values: success or busy*
 
-Передаёт контроль над устройством от программы захвата вашему внешнему скрипту. До тех пор пока не выполнена эта команда, через API могут выполняться лишь GET-команды.
+Passes on the controlling of device from capturing software to your external script. Unless this command was executed, only GET-commands can be executed by means of API.
 
 <pre>
 >> lock
@@ -134,9 +134,9 @@
 
 ## unlock
 
-*Возвращаемые значения: success или not locked*
+*Returned values: success or not locked*
 
-По аналогии с предыдущей командой передаёт управление от вашего скрипта обратно программе Лайтпака. Все настройки берутся из текущего профиля. Именно благодаря этому простейшему механизму передачи приоритета становится возможным полноценно использовать все фичи основной программы захвата в ваших скриптах.
+By the analogy with the previous command, passes on the controlling from your script back to Lightpack software. All the settings are applied from the current profile. It is this simple mechanism of priority transfer that makes it possible to use all features of the main capturing program in your scripts to the fullest. 
 
 <pre>
 >> unlock
@@ -145,13 +145,13 @@
 
 ## setcolor
 
-*Синтаксис: setcolor:N-R,G,B*
+*Syntax: setcolor:N-R,G,B*
 
-*Возвращаемые значения: ok, error, busy или not locked*
+*Returned values: ok, error, busy or not locked*
 
-Здесь и далее в set-командах ответ busy означает, что API уже "залочен" другим скриптом, пользователем через сеть и пр. См. команду lock.
+Here and elsewhere in set-commands the reply "busy" means that API is already locked by another script, user via network, etc. (see lock command).
 
-Основная команда для установки цвета. N -- номер светодиода (совпадает с номером его зоны захвата). R,G,B -- значение яркости каждого канала указанного светодиода устанавливается числом от 0 до 255. Так же этой командой можно установить цвета на несколько или все светодиоды одновременно. Для каждого из них конструкцию N-R,G,B нужно указывать через ;
+The main command for color setting. N is the number of  LED (same as its capturing zone number). R,G,B - the brightness value of each channel of the pointed LED is set with the value from 0 to 255. Also this commands allows to set colors on some or all LEDs simultaneously. For each of them the construction of N-R,G,B should be separated with ; 
 
 <pre>
 >> setcolor:1-0,255,0;5-255,200,30;
@@ -160,11 +160,11 @@
 
 ## setgamma
 
-*Синтаксис: setgamma:N*
+*Syntax: setgamma:N*
 
-*Возвращаемые значения: ok, error, busy или not locked*
+*Returned values: ok, error, busy or not locked*
 
-Устанавливает уровень гамма-коррекции для устройства в диапазоне от 0.01 до 10.00 .
+Sets gamma-correction level for the device within the range from 0.01 to 10.00.
 
 <pre>
 >> setgamma:2.15
@@ -173,11 +173,11 @@
 
 ## setsmooth
 
-*Синтаксис: setsmooth:N*
+*Syntax: setsmooth:N*
 
-*Возвращаемые значения: ok, error, busy или not locked*
+*Returned values: ok, error, busy or not locked*
 
-Устанавливает степень плавности смены цветов для устройства в диапазоне от 0 (плавность отключена) до 255 .
+Sets the level of color change smoothness for device within the range from  0 (smoothness disabled) to 255 .
 
 <pre>
 >> setsmooth:100
@@ -186,11 +186,11 @@
 
 ## setbrightness
 
-*Синтаксис: setbrightness:N*
+*Syntax: setbrightness:N*
 
-*Возвращаемые значения: ok, error, busy или not locked*
+*Returned values: ok, error, busy or not locked*
 
-Устанавливает степень яркости для всех светодиодов устройства одновременно в диапазоне от 0 (подсветка выключена) до 100 .
+Sets brightness level to all device's LEDs at the same time within the range of 0 (lighting disabled) to 100 .
 
 <pre>
 >> setbrightness:80
@@ -199,11 +199,11 @@
 
 ## setprofile
 
-*Синтаксис: setprofile:<name>*
+*Syntax: setprofile:<name>*
 
-*Возвращаемые значения: ok, error, busy или not locked*
+*Returned values: ok, error, busy or not locked*
 
-Включает заданный профиль настроек. Список профилей доступен по команде getprofiles (см. выше).
+Turns on the defined settings profile. Profiles list is available on command getprofiles (see above).
 
 <pre>
 >> setprofile:My HD video
@@ -212,11 +212,11 @@
 
 ## setstatus
 
-*Возможные параметры: on или off*
+*Possible parameters: on or off*
 
-*Возвращаемые значения: ok, error, busy или not locked*
+*Returned values: ok, error, busy or not locked*
 
-Включает и выключает устройство. Аналог кнопки "вкл/выкл подсветку" в настройках программы.
+Turnes the device on or off. Represents the "turn the lighting on/off" button in the software settings.
 
 <pre>
 >> setstatus:off
